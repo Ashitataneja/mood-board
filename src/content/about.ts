@@ -8,3 +8,13 @@ export const aboutFacts = [
 ];
 
 export const aboutBio = '[PLACEHOLDER: 3–4 sentence bio]';
+
+/** The photo the petals open around, and a row of photos after the bio. */
+export const aboutPhoto = { src: '', alt: 'Portrait of Ashita Taneja' };
+
+export const aboutPhotos = [
+  { src: '', alt: '[PLACEHOLDER: photo 1 description]' },
+  { src: '', alt: '[PLACEHOLDER: photo 2 description]' },
+  { src: '', alt: '[PLACEHOLDER: photo 3 description]' },
+  { src: '', alt: '[PLACEHOLDER: photo 4 description]' },
+];

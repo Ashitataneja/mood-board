@@ -133,7 +133,9 @@ export function Track({
       if (dir === 'home') i = 0;
       else if (dir === 'end') i = list.length - 1;
       else i = Math.min(list.length - 1, Math.max(0, i + dir));
-      glideTo(list[i].offsetLeft - pad);
+      // measured on screen, so stops nested inside a panel work too
+      const offset = list[i].getBoundingClientRect().left - el.getBoundingClientRect().left;
+      glideTo(el.scrollLeft + offset - pad);
     };
 
     const onKey = (e: KeyboardEvent) => {
