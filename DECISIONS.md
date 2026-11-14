@@ -29,3 +29,17 @@ Assumptions made where the brief was open. Each one favours smooth motion and a 
 - **Blush glow** is a soft radial blur behind the body. The brief asks for it on About only; it's driven by the `blush` mood, so it appears wherever that mood is used.
 - **Reduced motion.** No breathing, blinking or flinching. Mood changes and pupil moves jump instantly. Sleep still happens, but there are no floating z's.
 - **`/playground`.** Has a mood picker for everyone, plus Blink, Flinch, Sleep and Wake buttons, a body-spin toggle (to prove the face stays upright), the 76px outlined progress size, and a 6 × 14 matrix of every character in every mood.
+
+## Phase 3: Landing crowd
+
+- **Scaling.** The 1440×900 canvas scales by `min(vw/1440, vh/900)`, centred and anchored to the bottom edge, so the crowd is always cropped by the bottom of the screen. The night background fills any side margins.
+- **Two layouts.** Windows at least 1024px wide and landscape get the brief's canvas. Everything else gets a 420×900 portrait canvas with a two-column huddle: the name splits over two lines, the shuffle is gentler (26px push over 260px), and the rise is 18px.
+- **Hit areas.** Character buttons ignore the pointer except on their painted body path. The crowd overlaps heavily, so without this a front character's empty corners would steal hover from the one behind it.
+- **Tab order** runs left to right (About, Writing, Work, Gallery, Contact, Résumé). Stacking order still follows the brief's back-to-front table.
+- **"In a hurry?" placement.** At 212px, the name runs to x≈1236 and collided with a pill in the top-right corner. On desktop the pill sits at the right end of the tagline row instead. On phones it shows only "In a hurry?" ("Plain list" stays in its accessible name).
+- **Plain-list overlay built now** (the brief lists it under phase 5), so the landing's button works today. It's a modal dialog: focus moves to the title, Tab stays inside it, Escape or "Back to the moods" closes it, and focus returns to the button. Each case study is one click away.
+- **Touch.** The first tap selects a character (bubble plus bounce), and a second tap on it, or a tap on the bubble, goes inside. Tapping empty space clears the selection. A tap also focuses the button, so focus-triggered selection ignores focus that follows a touch.
+- **`overflow: clip`** on the landing, not `hidden`: Work and Contact run below the screen edge, and focusing them was scrolling the "hidden" container.
+- **Entering** is a plain route change for now. The eye dive replaces it in phase 4.
+- **`public/resume.pdf`** is a one-page placeholder PDF until you add the real one.
+- **About's eyes** stay at the brief's 0.33h for now (flagged in phase 2).

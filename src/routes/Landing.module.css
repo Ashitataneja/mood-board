@@ -1,0 +1,107 @@
+.page {
+  position: fixed;
+  inset: 0;
+  /* clip, not hidden: focusing a character that runs off the bottom must not scroll the stage */
+  overflow: clip;
+  background: var(--night);
+  color: var(--paper);
+}
+
+.hurry {
+  position: absolute;
+  top: clamp(16px, 2.4vw, 28px);
+  right: clamp(16px, 2.4vw, 32px);
+  z-index: 20;
+}
+
+/* The 1440×900 (or 420×900) canvas, scaled to fit and anchored to the bottom edge. */
+.stage {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform-origin: 50% 100%;
+}
+
+.name {
+  position: absolute;
+  margin: 0;
+  font-family: var(--font-display);
+  line-height: 0.9;
+  letter-spacing: 1px;
+  color: var(--paper);
+  white-space: nowrap;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.tagline {
+  position: absolute;
+  margin: 0;
+  color: var(--paper);
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.crowd {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.slot {
+  position: absolute;
+}
+
+/* Only the painted body is hoverable, so overlapping boxes don't steal each other's pointer. */
+.member {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  border-radius: 24px;
+}
+.member :global(svg path) {
+  pointer-events: visiblePainted;
+}
+.member:focus-visible {
+  outline-offset: 6px;
+}
+
+.bounce {
+  position: absolute;
+  inset: 0;
+}
+
+.bubble {
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 22px 20px;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 26px;
+  box-shadow: 6px 6px 0 var(--accent);
+  cursor: pointer;
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: calc(var(--tail) - 14px);
+  width: 28px;
+  height: 14px;
+  background: var(--paper);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.bubbleName {
+  font-family: var(--font-display);
+  font-size: 40px;
+  line-height: 0.95;
+}
+.bubbleLine {
+  font-size: 19px;
+  line-height: 1.35;
+}
