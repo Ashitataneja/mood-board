@@ -92,4 +92,6 @@ export const site = {
   email: 'taneja.ashita@gmail.com',
   linkedin: 'https://www.linkedin.com/in/ashita-taneja-2000/',
   resumePdf: '/resume.pdf',
+  /** Form endpoint (e.g. Formspree). Empty means the mailto: fallback. Set VITE_CONTACT_ENDPOINT. */
+  contactEndpoint: (import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined)?.trim() || '',
 };

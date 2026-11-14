@@ -113,6 +113,17 @@ export function Track({
       if (e.ctrlKey) return; // pinch-zoom
       if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // already horizontal: native
       if (max() <= 0) return;
+      // Let anything inside that scrolls vertically (a chat log, a long card) have the wheel.
+      for (let n = e.target as HTMLElement | null; n && n !== el; n = n.parentElement) {
+        const oy = getComputedStyle(n).overflowY;
+        if ((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1) {
+          const down = e.deltaY > 0;
+          const canScroll = down
+            ? n.scrollTop + n.clientHeight < n.scrollHeight - 1
+            : n.scrollTop > 0;
+          if (canScroll) return;
+        }
+      }
       e.preventDefault();
       const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? el.clientWidth : 1;
       if (!gliding) target = el.scrollLeft;

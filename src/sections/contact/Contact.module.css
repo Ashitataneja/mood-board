@@ -1,0 +1,232 @@
+.chat {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 28px;
+  align-items: end;
+}
+.cloud {
+  align-self: end;
+  justify-self: center;
+  margin-bottom: 8px;
+}
+.thread {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ---------- the conversation ---------- */
+.log {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 4px 8px 4px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+}
+.log > :first-child {
+  margin-top: auto; /* new messages grow up from the composer */
+}
+.cloudMsg,
+.meMsg {
+  max-width: min(80%, 460px);
+  padding: 12px 18px;
+  border-radius: 22px;
+  font-size: 19px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.cloudMsg {
+  align-self: flex-start;
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-bottom-left-radius: 6px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.meMsg {
+  align-self: flex-end;
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom-right-radius: 6px;
+}
+.typing {
+  display: flex;
+  gap: 6px;
+  padding: 16px 18px;
+}
+.typing span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink);
+  animation: bounce 0.9s ease-in-out infinite;
+}
+.typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-7px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing span {
+    animation: none;
+  }
+}
+
+.links {
+  align-self: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.links a,
+.links button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* ---------- composer ---------- */
+.composer,
+.plain {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  --focus-color: var(--ink);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 16px;
+  transition: transform 220ms var(--spring-pop);
+}
+.chip:hover:not(:disabled),
+.chip:focus-visible {
+  transform: translateY(-2px);
+}
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 18px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  border: 3px solid var(--ink);
+  background: var(--white);
+  color: var(--ink);
+  resize: none;
+}
+.input::placeholder {
+  color: #6b675e; /* 5.3:1 on white */
+}
+.input[aria-invalid='true'] {
+  border-style: dashed;
+}
+.send {
+  flex: none;
+  padding: 0 20px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+}
+.send:disabled,
+.chip:disabled,
+.input:disabled {
+  opacity: 0.55;
+}
+.error {
+  font-weight: 600;
+  font-size: 16px;
+}
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+}
+.plainLink {
+  align-self: flex-start;
+  font-size: 15px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- plain form ---------- */
+.plain {
+  max-width: 640px;
+  overflow-y: auto;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-weight: 600;
+  font-size: 17px;
+}
+.status {
+  min-height: 1.4em;
+  font-weight: 600;
+}
+
+@media (max-width: 1023px) {
+  .chat {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    gap: 6px;
+  }
+  .cloud {
+    justify-self: start;
+    margin: 0;
+  }
+  .cloudMsg,
+  .meMsg {
+    font-size: 17px;
+    max-width: 88%;
+  }
+  .send {
+    padding: 0 14px;
+  }
+}
