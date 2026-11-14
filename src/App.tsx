@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { CharacterProvider } from './characters/CharacterProvider';
 
 // Every route's interior is code-split (brief section 13).
 const Landing = lazy(() => import('./routes/Landing'));
@@ -9,11 +10,11 @@ const NotFound = lazy(() => import('./routes/NotFound'));
 
 export default function App() {
   return (
-    <>
+    <CharacterProvider>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <Suspense fallback={<div className="route-fallback" aria-hidden="true" />}>
+      <Suspense fallback={<main id="main" className="route-fallback" />}>
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/work" element={<SectionStub id="work" />} />
@@ -28,6 +29,6 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
-    </>
+    </CharacterProvider>
   );
 }
