@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { Character } from '../characters/Character';
 import { brighten, springs } from '../characters/moods';
@@ -8,6 +7,9 @@ import { HurryButton } from '../components/Hurry';
 import { sections, site } from '../content/sections';
 import type { Section, SectionId } from '../content/types';
 import { useViewport } from '../hooks/useViewport';
+import { useDive } from '../dive/context';
+import { lastInputWasKeyboard } from '../hooks/inputModality';
+import type { LookTarget } from '../characters/Face';
 import { pickLayout, type CrowdLayout } from '../landing/layout';
 import styles from './Landing.module.css';
 
@@ -18,15 +20,24 @@ export default function Landing() {
   const vp = useViewport();
   const layout = pickLayout(vp.w, vp.h);
   const k = Math.min(vp.w / layout.width, vp.h / layout.height);
-  const navigate = useNavigate();
   const { reduced } = useCharacterWorld();
+  const dive = useDive();
 
   const [active, setActive] = useState<SectionId | null>(null);
   const [bounce, setBounce] = useState(0);
   const lastPointer = useRef<string>('mouse');
   const lastDown = useRef(0);
 
-  const enter = useCallback((s: Section) => navigate(s.path), [navigate]);
+  const enter = useCallback((s: Section) => dive.enter(s.id), [dive]);
+
+  // Coming back out of a section: that character blinks once (handled in the
+  // Face via blinkSignal) and, for keyboard users, gets focus back.
+  useEffect(() => {
+    if (!dive.returned || !lastInputWasKeyboard()) return;
+    document
+      .querySelector<HTMLButtonElement>(`[data-crowd-id="${dive.returned.id}"]`)
+      ?.focus({ preventScroll: true });
+  }, [dive.returned]);
 
   // Tap outside the crowd (touch) clears the selection.
   useEffect(() => {
@@ -50,7 +61,11 @@ export default function Landing() {
   const activeSection = active ? sections.find((s) => s.id === active)! : null;
 
   return (
-    <main id="main" className={styles.page}>
+    <main
+      id="main"
+      className={styles.page}
+      style={dive.busy ? { pointerEvents: 'none' } : undefined}
+    >
       <h1 className="visually-hidden">Ashita Taneja, designer and researcher</h1>
       <div
         className={styles.hurry}
@@ -108,6 +123,14 @@ export default function Landing() {
               centres={centres}
               reduced={reduced}
               bounce={active === s.id ? bounce : 0}
+              look={
+                dive.diving === s.id
+                  ? 'viewer'
+                  : dive.diving && dive.glance
+                    ? dive.glance
+                    : 'pointer'
+              }
+              blink={dive.returned?.id === s.id ? dive.returned.n : 0}
               onActivate={(on, via) => {
                 // A tap focuses the button before its click: let the click decide.
                 const tapping =
@@ -152,6 +175,8 @@ interface MemberProps {
   centres: Record<SectionId, number>;
   reduced: boolean;
   bounce: number;
+  look: LookTarget;
+  blink: number;
   onActivate: (on: boolean, via: 'pointer' | 'focus') => void;
   onPress: () => void;
 }
@@ -163,6 +188,8 @@ function CrowdMember({
   centres,
   reduced,
   bounce,
+  look,
+  blink,
   onActivate,
   onPress,
 }: MemberProps) {
@@ -188,6 +215,7 @@ function CrowdMember({
       <motion.button
         type="button"
         data-crowd
+        data-crowd-id={s.id}
         className={styles.member}
         style={{ ['--focus-color' as string]: 'var(--paper)' }}
         aria-label={`${s.name}. ${s.hoverLine} Opens the section.`}
@@ -213,6 +241,9 @@ function CrowdMember({
             height={slot.h}
             mood={isActive ? brighten(s.defaultMood) : undefined}
             showName
+            look={look}
+            blinkSignal={blink}
+            blinkDuration={0.22}
           />
         </motion.div>
       </motion.button>

@@ -43,3 +43,20 @@ Assumptions made where the brief was open. Each one favours smooth motion and a 
 - **Entering** is a plain route change for now. The eye dive replaces it in phase 4.
 - **`public/resume.pdf`** is a one-page placeholder PDF until you add the real one.
 - **About's eyes** stay at the brief's 0.33h for now (flagged in phase 2).
+
+## Phase 4: Eye dive and routing
+
+- **One route for every section** (`/:section/:slug?` → `SectionRoute`), so the section view stays mounted when you move between sections and can cross-fade and slide. An unknown section shows the 404.
+- **`DiveProvider`** owns a single fixed overlay (black pupil, colour layer, two eyelids). It watches every location change in a layout effect and chooses the transition there, so browser back and forward get the same treatment as clicks:
+  - Character click: the full eye dive (look 150ms, pupil grows 500ms, colour opens 250ms). Timings follow the brief.
+  - Landing to section by a link or browser forward, or a deep link on first load: the eye-open entry, two black eyelids parting over 450ms.
+  - Section to landing (back pill, Escape, browser back): the reverse dive. The colour shrinks to the character's real pupil position (measured after the landing mounts), then the pupil shrinks back into the eye, then the character blinks.
+  - Section to section: the background cross-fades over 600ms while content slides out left and in from the right.
+- **The "look" beat snaps.** The clicked character's pupils jump to centre instead of springing, as the brief says. The others glance at its face (their pupils aim at a point a third of the way down its body).
+- **The colour opens from the screen centre** on entry, per the brief. On exit it shrinks toward the pupil itself, so the reverse lands precisely in the eye.
+- **Escape** goes up one level: from `/work/:slug` to `/work`, and from a section to the crowd. It's ignored while typing in a form field, and dialogs (the plain list) catch it first.
+- **Focus.** On arrival, focus moves to the section title. When you return to the crowd with the keyboard, focus goes back to the character you left from (pointer users aren't given focus, which would pop its bubble open).
+- **The back pill** is a real link to `/` (so middle-click and new-tab still work); a plain click plays the reverse dive.
+- **Clicks during a dive are ignored**, and the landing ignores the pointer until the dive finishes.
+- **The section chunk is preloaded** at the start of a dive, so the page is ready under the pupil before the colour opens.
+- **Reduced motion:** entering and leaving are ~200ms colour cross-fades; switching is a 200ms fade.

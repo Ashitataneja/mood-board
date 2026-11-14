@@ -73,6 +73,7 @@ export function Character({
     <div
       className={[styles.root, className].filter(Boolean).join(' ')}
       style={{ width: w, height: h, ...style }}
+      data-character={id}
       aria-hidden="true"
     >
       <div

@@ -153,10 +153,11 @@ export function Face({
       let tx: number;
       let ty: number;
       if (look === 'viewer') {
-        lpX.set(0);
-        lpY.set(lookUp);
-        rpX.set(0);
-        rpY.set(lookUp);
+        // snap, don't glide: this is the "look at you" beat of the eye dive
+        lpX.jump(0);
+        lpY.jump(lookUp);
+        rpX.jump(0);
+        rpY.jump(lookUp);
         return;
       } else if (look === 'pointer') {
         tx = pointerX.get();
@@ -219,6 +220,7 @@ export function Face({
         <circle cx={cx} cy={ey} r={E / 2} style={{ fill: 'var(--white)' }} />
         <g clipPath={`url(#${uid}-${side})`}>
           <motion.circle
+            data-pupil={side}
             cx={cx}
             cy={ey}
             r={E / 2}
