@@ -14,6 +14,7 @@ import type { SectionId } from '../content/types';
 import { useCharacterWorld } from '../characters/useMood';
 import { DiveContext, type DiveApi, type Entry } from './context';
 import { sectionFromPath } from './routes';
+import { loadBody } from '../sections/registry';
 import styles from './Dive.module.css';
 
 const EASE_DIVE = [0.7, 0, 0.2, 1] as const;
@@ -105,6 +106,7 @@ export function DiveProvider({ children }: { children: ReactNode }) {
       if (busyRef.current) return;
       const s = sectionById[id];
       preloadSection();
+      loadBody[id]();
       begin();
 
       if (reduced) {

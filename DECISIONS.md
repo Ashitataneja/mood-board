@@ -60,3 +60,17 @@ Assumptions made where the brief was open. Each one favours smooth motion and a 
 - **Clicks during a dive are ignored**, and the landing ignores the pointer until the dive finishes.
 - **The section chunk is preloaded** at the start of a dive, so the page is ready under the pupil before the colour opens.
 - **Reduced motion:** entering and leaving are ~200ms colour cross-fades; switching is a 200ms fade.
+
+## Phase 5: Section shell
+
+- **Shell structure.** `SectionRoute` holds what stays put across sections: background, back pill, "In a hurry?" and the peeking characters. Each section body is its own lazy chunk (`src/sections/registry.ts`), preloaded when a dive starts. Bodies render a `ShellTrack` (the horizontal track plus the rolling character) and `Panel`s.
+- **Wheel.** Applies only when the gesture is mostly vertical and the track can actually scroll; horizontal trackpad swipes and touch stay native. The glide keeps its own float position (lerp 0.12 per frame), so it never stalls on whole-pixel rounding. Ctrl+wheel (pinch-zoom) is left alone.
+- **Keys.** ←/→ and PageUp/PageDown move panel by panel; Home/End work when the track itself has focus. They're ignored inside form fields.
+- **Active panel.** The panel under a point one third across the track. At the very end of the scroll, the last panel wins, because it can never reach the left third. Panels are marked with a `data-active` attribute written directly to the DOM, so scrolling doesn't re-render them.
+- **The active shadow** is a separate ink layer behind the card that fades in by opacity, rather than an animated `box-shadow`.
+- **Card surfaces.** The brief doesn't say what panels look like, so they're paper cards with a 3px ink border (white cards on Résumé, so they don't vanish paper-on-paper). The hero panel has no card and sits straight on the section colour.
+- **Rolling character.** 76px on desktop, 56px on phones (where every pixel of panel height counts). The line runs from x=40 to just before the peeking characters (≈880px at 1440). Per shape: Work's squircle tumbles (rolls, lifting slightly on its corners), the flower spins 1.5× its roll, the arch waddles ±8° without rolling, the burst rolls, the cloud rolls with a bounce, and the square slides (brief §8.6). With reduced motion it just slides. The percentage is written straight to the DOM, with no re-render per scroll frame.
+- **Peeking characters.** All are scaled to the same width (96px, or 58px on small screens), so every face reads at the same size; tall Writing just hangs lower. On phones they become a centred row along the bottom and the progress line moves above them. Their accessible names are "Go to About" and so on.
+- **Live region.** One polite `role="status"` region. It announces the section (or case study) on arrival and each case-study stage as it becomes active ("Work, case study BHAROSA, stage 3 of 5: Insight").
+- **Section bodies for now.** Each section shows real content from the data files as cards: case studies with their mood arc, About facts, posts, gallery tiles, contact links and résumé blocks. Phases 6–9 replace each one with its bespoke interior. Some data moved out of components into `src/content/about.ts` and `src/content/resume.ts`.
+- **Known rough edge.** On short phones (≈664px tall), a Work card's "Go inside →" sits below the fold inside the card, which scrolls. Revisit in phase 10.

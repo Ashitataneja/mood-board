@@ -189,3 +189,9 @@
   background: var(--paper);
   color: var(--ink);
 }
+@media (max-width: 600px) {
+  .pill {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+}

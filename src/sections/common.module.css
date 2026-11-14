@@ -1,0 +1,117 @@
+.heroTitle {
+  outline: none;
+  word-break: break-word;
+}
+.heroLine {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1.05;
+  max-width: 22ch;
+}
+.hint {
+  margin-top: 8px;
+}
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tags li {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 2px solid currentColor;
+}
+.media {
+  flex: 1 1 auto;
+  min-height: 120px;
+  border-radius: 18px;
+  border: 3px solid var(--ink);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  color: var(--ink);
+  text-align: center;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+}
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 5vw, 84px);
+  line-height: 0.92;
+}
+.cardTitleSm {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3vw, 44px);
+  line-height: 0.95;
+}
+.body {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.stat {
+  font-family: var(--font-display);
+  font-size: clamp(110px, 14vw, 210px);
+  line-height: 0.85;
+}
+.go {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  font-weight: 600;
+  --focus-color: var(--ink);
+  transition: transform 260ms var(--spring-pop);
+}
+.go:hover,
+.go:focus-visible {
+  transform: translateX(4px);
+}
+.chip {
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.list {
+  margin: 0;
+  padding-left: 1.1em;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  flex: 1;
+}
+.grid > * {
+  min-height: 0;
+}
+@media (max-height: 760px), (max-width: 600px) {
+  .media {
+    flex: 0 0 auto;
+    min-height: 0;
+    height: clamp(64px, 14vh, 140px);
+  }
+  .cardTitle {
+    font-size: clamp(40px, 11vw, 56px);
+  }
+}

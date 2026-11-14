@@ -1,0 +1,110 @@
+/* ---------- rolling progress ---------- */
+.roller {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+.line {
+  position: absolute;
+  bottom: clamp(36px, 6vh, 56px);
+  height: 2px;
+  background: currentColor;
+  opacity: 0.55;
+}
+.rollerBody {
+  position: absolute;
+  left: 0;
+  bottom: clamp(37px, calc(6vh + 1px), 57px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rollerLabel {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 0;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+/* ---------- peeking navigation ---------- */
+.peeks {
+  position: absolute;
+  right: clamp(12px, 2vw, 32px);
+  bottom: 0;
+  z-index: 8;
+}
+.peeks ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+.peeks[data-small] {
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+.peeks[data-small] ul {
+  gap: 6px;
+}
+.peeks li {
+  position: relative;
+}
+.peek {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  border-radius: 18px 18px 0 0;
+}
+.peek:focus-visible {
+  outline-offset: 4px;
+}
+.peekBody {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+}
+.peekName {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  translate: -50% -100%;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Phones and tablets: the line sits above the row of peeking faces. */
+@media (max-width: 1023px) {
+  .line {
+    bottom: 76px;
+  }
+  .rollerBody {
+    bottom: 77px;
+  }
+  .rollerLabel {
+    font-size: 11px;
+  }
+}

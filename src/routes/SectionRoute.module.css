@@ -3,7 +3,15 @@
   inset: 0;
   overflow: clip;
 }
+/* Résumé cards would vanish paper-on-paper: give them white. */
+.shell[data-section='resume'] {
+  --card-bg: var(--white);
+}
 .bg {
+  position: absolute;
+  inset: 0;
+}
+.content {
   position: absolute;
   inset: 0;
 }
@@ -17,6 +25,10 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  pointer-events: none;
+}
+.top > * {
+  pointer-events: auto;
 }
 .pill {
   padding: 10px 18px;
@@ -26,29 +38,16 @@
   font-weight: 600;
   font-size: 15px;
   line-height: 1.2;
+  white-space: nowrap;
   transition: transform 260ms var(--spring-pop);
+}
+@media (max-width: 600px) {
+  .pill {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
 }
 .pill:hover,
 .pill:focus-visible {
   transform: translateY(-2px) scale(1.04);
-}
-.content {
-  position: absolute;
-  inset: 0;
-  padding: clamp(96px, 14vh, 140px) clamp(16px, 4vw, 64px) 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.title {
-  outline: none;
-}
-.line {
-  font-size: var(--fs-h3);
-  font-family: var(--font-display);
-  line-height: 1.05;
-  max-width: 24ch;
-}
-.note {
-  max-width: 60ch;
 }
