@@ -89,7 +89,7 @@ export const sectionById = Object.fromEntries(sections.map((s) => [s.id, s])) as
 export const site = {
   name: 'ASHITA TANEJA',
   tagline: 'DESIGNER + RESEARCHER · HOVER TO MEET THE MOODS · CLICK ONE TO GO INSIDE',
-  email: '[PLACEHOLDER: email address]',
-  linkedin: '[PLACEHOLDER: LinkedIn URL]',
+  email: 'taneja.ashita@gmail.com',
+  linkedin: 'https://www.linkedin.com/in/ashita-taneja-2000/',
   resumePdf: '/resume.pdf',
 };
