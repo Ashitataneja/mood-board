@@ -1,4 +1,24 @@
 import { Children, useEffect, useRef, type ReactNode } from 'react';
+
+/** Make a box keyboard-focusable only while its content overflows, so it can be scrolled. */
+function useScrollableFocus<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const check = () => {
+      if (el.scrollHeight > el.clientHeight + 1) el.setAttribute('tabindex', '0');
+      else el.removeAttribute('tabindex');
+    };
+    check();
+    document.fonts?.ready.then(check);
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    for (const child of Array.from(el.children)) ro.observe(child);
+    return () => ro.disconnect();
+  }, []);
+  return ref;
+}
 import type { MotionValue } from 'motion/react';
 import { useCharacterWorld } from '../characters/useMood';
 import { Reveal } from '../components/Reveal';
@@ -229,10 +249,12 @@ export function Panel({
   labelledBy?: string;
   label?: string;
 }) {
+  const surface = useScrollableFocus<HTMLElement>();
   return (
     <div data-panel className={[styles.panel, styles[size]].join(' ')}>
       {variant !== 'plain' && <div className={styles.shadow} aria-hidden="true" />}
       <section
+        ref={surface}
         className={[styles.surface, styles[variant], className].filter(Boolean).join(' ')}
         aria-labelledby={labelledBy}
         aria-label={label}

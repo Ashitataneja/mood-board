@@ -25,3 +25,9 @@ npm run format
 The Contact chat posts JSON to `VITE_CONTACT_ENDPOINT` (Formspree-compatible). Without it, Send opens the visitor's email app with the message pre-filled.
 
 To switch Formspree on: create a form at formspree.io, copy its endpoint (`https://formspree.io/f/…`), and add it as `VITE_CONTACT_ENDPOINT` in Vercel (Settings → Environment Variables), then redeploy. Locally, put it in a `.env.local` file.
+
+## Icons and share image
+
+`node scripts/make-icons.cjs` (with `npm run dev` running) regenerates `public/favicon.svg`, `public/apple-touch-icon.png` and `public/og.png`. Re-run it if the crowd or Work's face changes.
+
+For absolute share-image URLs, Vercel's production domain is used automatically. Elsewhere, set `VITE_SITE_URL=https://your-domain` at build time.

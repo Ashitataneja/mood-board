@@ -80,7 +80,7 @@ svg {
 
 .placeholder {
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: max(12px, 0.85em);
   outline: 2px dashed currentColor;
   outline-offset: 2px;
   padding: 0 4px;
@@ -130,12 +130,21 @@ svg {
   }
 }
 
-/* Typewriter caret (Résumé). A static block: it moves only because the text does. */
-.caret {
-  display: inline-block;
-  width: 0.6em;
-  height: 1.05em;
-  margin-left: 1px;
-  vertical-align: text-bottom;
-  background: currentColor;
+/* Typewriter (Résumé): full text underneath, typed overlay on top. */
+.tw {
+  position: relative;
+  display: block;
+}
+.tw-full {
+  color: transparent;
+}
+.tw-full[data-done] {
+  color: inherit;
+}
+.tw-typed {
+  position: absolute;
+  inset: 0;
+}
+.tw-full[data-done] + .tw-typed {
+  visibility: hidden;
 }

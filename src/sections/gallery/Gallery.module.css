@@ -41,8 +41,17 @@
   place-items: center;
   padding: 10px;
   text-align: center;
-  font-size: 12px;
+}
+.ph::after {
+  content: attr(data-label);
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--paper);
   color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  outline: 2px dashed var(--ink);
 }
 
 /* ---------- lightbox ---------- */
@@ -73,8 +82,8 @@
   padding: 10px;
   box-shadow: 10px 10px 0 var(--gallery);
 }
-.bigFrame .ph {
-  font-size: 18px;
+.bigFrame .ph::after {
+  font-size: 15px;
 }
 .big figcaption {
   display: flex;

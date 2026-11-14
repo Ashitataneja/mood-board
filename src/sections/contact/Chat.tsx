@@ -67,7 +67,7 @@ export function Chat() {
   const [error, setError] = useState('');
   const [log, setLog] = useState<Msg[]>([]);
   const [mailto, setMailto] = useState(false);
-  const logRef = useRef<HTMLOListElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
   const interacted = useRef(false);
   const cloud = useAnimationControls();
@@ -203,63 +203,67 @@ export function Chat() {
       </motion.div>
 
       <div className={styles.thread}>
-        <ol
+        <div
           ref={logRef}
           className={styles.log}
           role="log"
           aria-live="polite"
           aria-label="Conversation"
         >
-          <AnimatePresence initial={false}>
-            {log.map((m, i) => (
-              <motion.li
-                key={m.id}
-                className={m.from === 'cloud' ? styles.cloudMsg : styles.meMsg}
-                initial={reduced ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={
-                  reduced ? { duration: 0.15 } : { type: 'spring', stiffness: 420, damping: 30 }
-                }
-                id={i === log.length - 1 && m.from === 'cloud' ? questionId : undefined}
-              >
-                <span className="visually-hidden">{m.from === 'cloud' ? 'Cloud: ' : 'You: '}</span>
-                {m.text}
-              </motion.li>
-            ))}
-            {typing && (
-              <motion.li
-                key="typing"
-                className={`${styles.cloudMsg} ${styles.typing}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.08 } }}
-                aria-label="The cloud is typing"
-              >
-                <span />
-                <span />
-                <span />
-              </motion.li>
+          <ol className={styles.logList}>
+            <AnimatePresence initial={false}>
+              {log.map((m, i) => (
+                <motion.li
+                  key={m.id}
+                  className={m.from === 'cloud' ? styles.cloudMsg : styles.meMsg}
+                  initial={reduced ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={
+                    reduced ? { duration: 0.15 } : { type: 'spring', stiffness: 420, damping: 30 }
+                  }
+                  id={i === log.length - 1 && m.from === 'cloud' ? questionId : undefined}
+                >
+                  <span className="visually-hidden">
+                    {m.from === 'cloud' ? 'Cloud: ' : 'You: '}
+                  </span>
+                  {m.text}
+                </motion.li>
+              ))}
+              {typing && (
+                <motion.li
+                  key="typing"
+                  className={`${styles.cloudMsg} ${styles.typing}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, transition: { duration: 0.08 } }}
+                  aria-label="The cloud is typing"
+                >
+                  <span />
+                  <span />
+                  <span />
+                </motion.li>
+              )}
+            </AnimatePresence>
+            {step === 'sent' && !typing && (
+              <li className={styles.links}>
+                <a href={`mailto:${site.email}`}>{site.email}</a>
+                <a href={site.linkedin} target="_blank" rel="noreferrer">
+                  LinkedIn ↗<span className="visually-hidden"> (opens in a new tab)</span>
+                </a>
+                <Link to="/resume">Résumé →</Link>
+                {mailto && <a href={mailtoHref(answers)}>Open the email again</a>}
+              </li>
             )}
-          </AnimatePresence>
-          {step === 'sent' && !typing && (
-            <li className={styles.links}>
-              <a href={`mailto:${site.email}`}>{site.email}</a>
-              <a href={site.linkedin} target="_blank" rel="noreferrer">
-                LinkedIn ↗<span className="visually-hidden"> (opens in a new tab)</span>
-              </a>
-              <Link to="/resume">Résumé →</Link>
-              {mailto && <a href={mailtoHref(answers)}>Open the email again</a>}
-            </li>
-          )}
-          {step === 'failed' && !typing && (
-            <li className={styles.links}>
-              <a href={mailtoHref(answers)}>Email {site.email}</a>
-              <button type="button" onClick={() => void finish(answers, true)}>
-                Try again
-              </button>
-            </li>
-          )}
-        </ol>
+            {step === 'failed' && !typing && (
+              <li className={styles.links}>
+                <a href={mailtoHref(answers)}>Email {site.email}</a>
+                <button type="button" onClick={() => void finish(answers, true)}>
+                  Try again
+                </button>
+              </li>
+            )}
+          </ol>
+        </div>
 
         {order.includes(step) && (
           <form className={styles.composer} onSubmit={onSubmit} noValidate aria-busy={typing}>

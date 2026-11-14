@@ -36,9 +36,51 @@ function galleryAltCheck(): Plugin {
   };
 }
 
+/**
+ * index.html helpers:
+ * - %SITE_URL% → the absolute site URL (share previews need absolute image URLs).
+ *   From VITE_SITE_URL, else Vercel's production domain, else empty (relative).
+ * - In builds, preload the Anton (latin) font so the display type doesn't swap late.
+ */
+function htmlExtras(): Plugin {
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  const site = (process.env.VITE_SITE_URL || (vercel ? `https://${vercel}` : '')).replace(
+    /\/$/,
+    '',
+  );
+  return {
+    name: 'html-extras',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html, ctx) {
+        const out = html.replaceAll('%SITE_URL%', site);
+        // Anton (display type) and Space Mono (labels; all of the Résumé), latin subsets only.
+        const fonts = Object.keys(ctx.bundle ?? {}).filter((f) =>
+          /(anton-latin-400|space-mono-latin-(400|700))-normal.*\.woff2$/.test(f),
+        );
+        return {
+          html: out,
+          tags: fonts.map((f) => ({
+            tag: 'link',
+            attrs: {
+              rel: 'preload',
+              href: `/${f}`,
+              as: 'font',
+              type: 'font/woff2',
+              crossorigin: '',
+            },
+            injectTo: 'head' as const,
+          })),
+        };
+      },
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     galleryAltCheck(),
+    htmlExtras(),
     {
       enforce: 'pre',
       ...mdx({

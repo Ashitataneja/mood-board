@@ -115,3 +115,14 @@
   gap: 16px;
   align-items: start;
 }
+
+/* Short screens: tighten the card so "Go inside" stays in view without scrolling the card. */
+@media (max-height: 760px) {
+  .card {
+    gap: 10px;
+    padding: 18px 20px;
+  }
+  .card ul[aria-label='Tags'] {
+    display: none; /* the tags are repeated on the case study itself */
+  }
+}

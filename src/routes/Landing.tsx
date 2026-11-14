@@ -28,6 +28,10 @@ export default function Landing() {
   const lastPointer = useRef<string>('mouse');
   const lastDown = useRef(0);
 
+  useEffect(() => {
+    document.title = 'Ashita Taneja · Designer + researcher';
+  }, []);
+
   const enter = useCallback((s: Section) => dive.enter(s.id), [dive]);
 
   // Coming back out of a section: that character blinks once (handled in the

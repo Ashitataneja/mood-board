@@ -10,6 +10,7 @@ export function useArrival<T extends HTMLElement>(announce: string) {
   const say = useAnnounce();
   useEffect(() => {
     say(announce);
+    document.title = `${announce} · Ashita Taneja`;
     const t = window.setTimeout(() => ref.current?.focus({ preventScroll: true }), 60);
     return () => window.clearTimeout(t);
   }, [announce, say]);

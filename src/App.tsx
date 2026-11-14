@@ -21,7 +21,8 @@ export default function App() {
           <Suspense fallback={<main id="main" className="route-fallback" />}>
             <Routes>
               <Route path="/" element={<Landing />} />
-              <Route path="/playground" element={<Playground />} />
+              {/* dev-only: every character × every mood */}
+              {import.meta.env.DEV && <Route path="/playground" element={<Playground />} />}
               {/* every section, with or without a slug: /work, /work/bharosa, /about … */}
               <Route path="/:section/:slug?" element={<SectionRoute />} />
               <Route path="*" element={<NotFound />} />

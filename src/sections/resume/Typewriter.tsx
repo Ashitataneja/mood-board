@@ -61,17 +61,27 @@ export function Typewriter({
   return <TypeContext.Provider value={{ shown, offsets }}>{children}</TypeContext.Provider>;
 }
 
-/** One typed line. `i` is its index in the Typewriter's `lines`. */
+/**
+ * One typed line. `i` is its index in the Typewriter's `lines`.
+ *
+ * The full text sits in one node that never moves (transparent until typed,
+ * and what screen readers read); the typed part is an overlay on top with the
+ * same wrapping, which only ever grows at its end. Splitting the text into
+ * typed/untyped nodes instead made the untyped node move with every
+ * character, which browsers count as dozens of layout shifts.
+ */
 export function Line({ i, text }: { i: number; text: string }) {
   const { shown, offsets } = useContext(TypeContext);
   const start = offsets[i] ?? 0;
   const n = Math.max(0, Math.min(text.length, shown - start));
-  const typing = n > 0 && n < text.length;
   return (
-    <>
-      <span>{text.slice(0, n)}</span>
-      {typing && <span className="caret" aria-hidden="true" />}
-      <span style={{ color: 'transparent' }}>{text.slice(n)}</span>
-    </>
+    <span className="tw">
+      <span className="tw-full" data-done={n >= text.length || undefined}>
+        {text}
+      </span>
+      <span className="tw-typed" aria-hidden="true">
+        {text.slice(0, n)}
+      </span>
+    </span>
   );
 }

@@ -96,6 +96,8 @@ export function Burst() {
       <motion.div
         ref={area}
         className={styles.area}
+        // while the lightbox is open, the rest is out of reach for keyboard and screen readers
+        {...(open !== null ? { inert: '' } : {})}
         animate={open === null ? { opacity: 1, scale: 1 } : { opacity: 0.3, scale: 0.97 }}
         transition={reduced ? { duration: 0.15 } : { type: 'spring', stiffness: 260, damping: 24 }}
       >
@@ -175,12 +177,13 @@ export function Picture({ img, large = false }: { img: GalleryImage; large?: boo
     );
   }
   return (
+    // The label is CSS content, so it isn't read as the button's text (the button is named by its alt).
     <span
       className={styles.ph}
       style={{ background: img.placeholder }}
-      aria-hidden={!large || undefined}
-    >
-      <span className="placeholder">{img.caption}</span>
-    </span>
+      data-label={img.caption}
+      role={large ? 'img' : undefined}
+      aria-label={large ? img.alt : undefined}
+    />
   );
 }

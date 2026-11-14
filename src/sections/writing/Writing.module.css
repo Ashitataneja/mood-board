@@ -73,7 +73,8 @@
   background: var(--paper);
   color: var(--ink);
   text-decoration: none;
-  opacity: 0.7;
+  /* 0.82 keeps the small date text above 4.5:1 even at rest */
+  opacity: 0.82;
   filter: blur(2px);
   transition:
     opacity 320ms var(--ease-out),
@@ -87,7 +88,8 @@
   transform: scale(1.05);
 }
 .bubble[data-state='dim'] {
-  opacity: 0.35;
+  opacity: 0.76;
+  filter: blur(3px);
 }
 .bubbleDate {
   font-family: var(--font-mono);

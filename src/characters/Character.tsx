@@ -128,7 +128,7 @@ export function Character({
               style={{
                 color: text,
                 top: g.my + g.mouthW / 2 + g.E * 0.15,
-                fontSize: Math.max(11, Math.min(15, g.E * 0.2)),
+                fontSize: Math.max(12, Math.min(15, g.E * 0.2)),
               }}
             >
               {s.name}

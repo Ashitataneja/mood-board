@@ -131,3 +131,36 @@ Assumptions made where the brief was open. Each one favours smooth motion and a 
 - **One rigid sheet:** paper, 1px ink hairlines, Space Mono throughout, a header row (title, name, Download PDF) and four columns (Education, Experience, Skills, Publications). On phones it stacks into one scrolling column.
 - **Typewriter.** Every line types in reading order, one at a time, 8ms per character, driven by a rAF clock, with a static block caret on the current line. The **full text is always in the DOM** (the untyped part is just transparent), so screen readers, search and copy-paste get everything immediately. Reduced motion shows it at once.
 - **Nothing else moves.** Panels don't lift or fade in. The square in the corner is deadpan: its eyes are fixed (no pointer tracking) and it doesn't breathe, flinch or sleep. It blinks once, slowly (0.9s), when typing finishes. The rolling square slides, as before.
+
+## Phase 10: Polish
+
+- **Accessibility audit.** axe-core (WCAG 2.0/2.1/2.2 A and AA plus best practice) ran on 14 routes and states (including the plain list, the lightbox, the plain contact form and the reader) at 1440×900 and 390×844. It found 12 violations; all are fixed and the final run is **0**:
+  - Writing bubbles rest at 82% opacity (was 70%), so their small date text clears 4.5:1. Unfocused bubbles now dim by extra blur rather than by dropping opacity.
+  - Gallery placeholder labels sit on a paper chip and are CSS content, so a tile button's accessible name is exactly its alt text. The gallery behind the lightbox is `inert`.
+  - The contact log is a `div role="log"` wrapping the list (a role isn't allowed on `ol`).
+  - A panel that overflows its height becomes keyboard-focusable so it can be scrolled. This is re-checked when fonts load and when its content resizes.
+- **Page titles** for every view ("Work, case study BHAROSA · Ashita Taneja"). They're set alongside the live-region announcement.
+- **404.** The whole cast is `worried`, each looking somewhere different, with "Nothing here." and "Back to the crowd?".
+- **`/playground` is dev-only.** It isn't in production builds.
+- **Icons and sharing.** `scripts/make-icons.cjs` generates `favicon.svg` (Work's intense face, from the same superellipse maths), `apple-touch-icon.png` and `og.png` (the crowd at 1200×630, eyes up toward the name). The Open Graph and Twitter tags need an absolute URL; a build step fills it in from `VITE_SITE_URL`, falling back to Vercel's `VERCEL_PROJECT_PRODUCTION_URL` (set automatically on Vercel), else relative.
+- **Font preload.** Anton and Space Mono (400/700, latin) are preloaded by a build step that finds their hashed file names.
+- **`robots.txt`** added. Without it, the SPA rewrite served HTML at `/robots.txt`.
+- **Text size floor.** `[PLACEHOLDER]` labels and the smallest labels are at least 12px.
+- **Short phones.** On screens under 760px tall, Work cards tighten and hide their tags (the tags are repeated on the case study), so "Go inside →" is always visible. On short phones the landing keeps its proportions, with narrow night margins at the sides.
+- **Résumé layout shift.** The typewriter used to split each line into typed and untyped text nodes. The untyped node moved with every character, which counted as about 100 layout shifts (CLS 0.12). Each line's full text is now one fixed node (transparent until typed; it's also what screen readers read), with the typed part as an overlay that only grows. The caret is gone: a moving caret is a shift too. CLS is now 0.
+- **Reduced motion, audited.** On every route nothing animates once settled, faces don't change while idle (no blink, breath or flinch, even after a fast pointer), and the dive is a cross-fade without the pupil.
+- **Measured performance** (production build, headless Chromium, so indicative): landing hover sweep, both dives, fast wheel on Work, the gallery burst and the flower scroll all ran at a median 16.7ms per frame with a 95th percentile ≤ 16.8ms. Only 2 frames went over 20ms, during the dive while the section's code loaded.
+- **Lighthouse** (mobile defaults, production build):
+
+  | Route         | Performance | Accessibility | Best practices | SEO  |
+  | ------------- | ----------- | ------------- | -------------- | ---- |
+  | /             | 94–95       | 100           | 100            | 100  |
+  | /work         | 92          | 100           | 100            | 100* |
+  | /work/bharosa | 91          | 100           | 100            | 100* |
+  | /about        | 92          | 100           | 100            | 100  |
+  | /writing      | 93          | 100           | 100            | 100  |
+  | /gallery      | 91          | 100           | 100            | 100  |
+  | /contact      | 91          | 100           | 100            | 100  |
+  | /resume       | 92          | 100           | 100            | 100  |
+
+  \* SEO was 91 before `robots.txt` was added; the only failing audit was robots-txt, now fixed.
