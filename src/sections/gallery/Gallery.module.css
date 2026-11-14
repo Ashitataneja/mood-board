@@ -1,0 +1,109 @@
+.panel {
+  position: relative;
+  height: 100%;
+}
+.area {
+  position: absolute;
+  inset: 0;
+}
+.tiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.tiles li {
+  position: absolute;
+}
+.tile {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  padding: 8px;
+  cursor: grab;
+  touch-action: none;
+  box-shadow: 6px 6px 0 var(--ink);
+  --focus-color: var(--ink);
+}
+.img,
+.ph {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  object-fit: cover;
+  pointer-events: none;
+}
+.ph {
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+/* ---------- lightbox ---------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 72px 24px 110px;
+  background: rgb(20 20 20 / 0.72);
+  --focus-color: var(--paper);
+}
+.big {
+  margin: 0;
+  width: min(1000px, 92vw);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--paper);
+}
+.bigFrame {
+  margin: 0 auto;
+  border-radius: 20px;
+  border: 4px solid var(--ink);
+  background: var(--paper);
+  padding: 10px;
+  box-shadow: 10px 10px 0 var(--gallery);
+}
+.bigFrame .ph {
+  font-size: 18px;
+}
+.big figcaption {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  justify-content: center;
+  font-size: 18px;
+}
+.count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+.controls {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+.controls button {
+  min-width: 52px;
+  height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  font-weight: 700;
+  font-size: 18px;
+}

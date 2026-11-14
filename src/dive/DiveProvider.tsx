@@ -111,7 +111,7 @@ export function DiveProvider({ children }: { children: ReactNode }) {
 
       if (reduced) {
         const c = colour.current!;
-        c.style.background = s.color;
+        c.style.background = s.bg ?? s.color;
         c.style.display = 'block';
         c.style.clipPath = 'none';
         await animate(c, { opacity: [0, 1] }, { duration: 0.1 });
@@ -156,7 +156,7 @@ export function DiveProvider({ children }: { children: ReactNode }) {
       setDiving(null);
       setGlance(null);
       const c = colour.current!;
-      c.style.background = s.color;
+      c.style.background = s.bg ?? s.color;
       c.style.display = 'block';
       await animate(
         c,
@@ -175,7 +175,7 @@ export function DiveProvider({ children }: { children: ReactNode }) {
       const s = sectionById[id];
       begin();
       const c = colour.current!;
-      c.style.background = s.color;
+      c.style.background = s.bg ?? s.color;
       c.style.display = 'block';
       c.style.clipPath = 'none';
       c.style.opacity = '1';

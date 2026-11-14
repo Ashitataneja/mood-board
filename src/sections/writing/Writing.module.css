@@ -1,0 +1,214 @@
+/* ---------- stars (shell backdrop) ---------- */
+.stars {
+  position: absolute;
+  inset: -40px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.starLayer,
+.starLayer > div {
+  position: absolute;
+  inset: 0;
+}
+.drift {
+  animation: drift ease-in-out infinite alternate;
+}
+@keyframes drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-36px, -22px);
+  }
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+/* ---------- dreams panel ---------- */
+.dreams {
+  position: relative;
+  height: 100%;
+  width: min(1240px, 140vw);
+}
+.bubbleList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.bubbleSpot {
+  position: absolute;
+  width: min(340px, 72vw);
+  animation: float ease-in-out infinite;
+}
+/* hold still while someone is aiming at it */
+.bubbleSpot:hover,
+.bubbleSpot:focus-within {
+  animation-play-state: paused;
+}
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(10px, -14px);
+  }
+  50% {
+    transform: translate(-6px, -22px);
+  }
+  75% {
+    transform: translate(-12px, -8px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 28px 34px 32px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.7;
+  filter: blur(2px);
+  transition:
+    opacity 320ms var(--ease-out),
+    filter 320ms var(--ease-out),
+    transform 380ms var(--spring-pop);
+  --focus-color: var(--paper);
+}
+.bubble[data-state='focus'] {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.05);
+}
+.bubble[data-state='dim'] {
+  opacity: 0.35;
+}
+.bubbleDate {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+.bubbleTitle {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 2.4vw, 34px);
+  line-height: 1.02;
+}
+.bubbleStand {
+  font-size: 16px;
+  line-height: 1.35;
+}
+.trail {
+  position: absolute;
+  left: 14%;
+  bottom: -30px;
+  pointer-events: none;
+}
+.trail span {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--paper);
+  opacity: 0.55;
+}
+.trail span:first-child {
+  width: 16px;
+  height: 16px;
+  left: 0;
+  top: 0;
+}
+.trail span:last-child {
+  width: 9px;
+  height: 9px;
+  left: -16px;
+  top: 22px;
+}
+.sleeper {
+  position: absolute;
+  left: 0;
+  bottom: -60px;
+}
+
+/* ---------- reader ---------- */
+.reader {
+  position: absolute;
+  inset: 0;
+}
+.lights {
+  position: absolute;
+  inset: 0;
+  background: rgb(10 12 11 / 0.94);
+}
+.readerScroll {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: clamp(96px, 14vh, 140px) 20px 200px;
+  overscroll-behavior: contain;
+}
+.article {
+  max-width: 680px;
+  margin: 0 auto;
+  color: var(--paper);
+}
+.meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+.postTitle {
+  font-size: var(--fs-h1);
+  margin: 12px 0 16px;
+  outline: none;
+}
+.standfirst {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1.15;
+  margin-bottom: 32px;
+}
+.prose {
+  font-size: 20px;
+  line-height: 1.6;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote {
+  margin: 0 0 1.1em;
+}
+.prose h2 {
+  font-size: var(--fs-h3);
+  margin: 1.6em 0 0.5em;
+}
+.prose blockquote {
+  padding-left: 18px;
+  border-left: 3px solid var(--paper);
+}
+.prose a {
+  text-underline-offset: 4px;
+}
+.end {
+  margin-top: 56px;
+  text-align: center;
+  font-family: var(--font-mono);
+  letter-spacing: 6px;
+}
+.readerSleeper {
+  position: absolute;
+  left: clamp(12px, 3vw, 40px);
+  bottom: -40px;
+  pointer-events: none;
+}
+
+/* No hover on touch screens: show the bubbles in focus, or they could never be read. */
+@media (hover: none) {
+  .bubble {
+    filter: none;
+    opacity: 0.94;
+  }
+}

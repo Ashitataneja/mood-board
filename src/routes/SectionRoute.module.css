@@ -56,3 +56,19 @@
 .pill:focus-visible {
   transform: translateY(-2px) scale(1.04);
 }
+
+/* Reading a post: lights down on everything but the post; the peeks stay usable. */
+.shell:has([data-reading]) nav {
+  opacity: 0.3;
+  transition: opacity 300ms var(--ease-out);
+}
+.shell:has([data-reading]) nav:hover,
+.shell:has([data-reading]) nav:focus-within {
+  opacity: 1;
+}
+
+/* Résumé: nothing lifts. */
+.shell[data-section='resume'] [data-panel] {
+  transform: none !important;
+  transition: none;
+}

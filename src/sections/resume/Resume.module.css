@@ -1,0 +1,129 @@
+/* Deliberately rigid: a strict grid on paper, black hairlines, Space Mono everywhere. */
+.sheet {
+  position: relative;
+  height: 100%;
+  width: min(1180px, calc(100vw - 128px));
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+  --focus-color: var(--ink);
+}
+.sheet :global(.placeholder) {
+  font-size: 1em;
+}
+.head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  gap: 24px;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--ink);
+}
+.title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(36px, 4.4vw, 64px);
+  line-height: 1;
+  letter-spacing: 2px;
+  outline: none;
+}
+.who {
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+.download {
+  display: inline-block;
+  padding: 14px 22px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.download:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid > section {
+  padding: 18px 20px;
+  border-right: 1px solid var(--ink);
+  overflow-y: auto;
+}
+.grid > section:last-child {
+  border-right: 0;
+}
+.grid h2 {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--ink);
+}
+.grid dl,
+.grid ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.grid dl > div {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ink);
+}
+.grid dt {
+  font-weight: 700;
+}
+.grid dd {
+  margin: 0;
+}
+.grid li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ink);
+}
+.square {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 96px;
+  height: 96px;
+  pointer-events: none;
+}
+
+@media (max-width: 1023px) {
+  .sheet {
+    width: 86vw;
+    overflow-y: auto;
+  }
+  .head {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .grid > section {
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+    overflow: visible;
+  }
+  .square {
+    position: sticky;
+    align-self: flex-end;
+    margin-top: auto;
+  }
+}

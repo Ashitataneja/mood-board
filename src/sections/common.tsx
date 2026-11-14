@@ -1,6 +1,6 @@
-import { useEffect, useRef, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { useAnnounce } from '../components/Announcer';
+import { useArrival } from './useArrival';
 import { Panel } from '../shell/Track';
 import styles from './common.module.css';
 
@@ -45,13 +45,7 @@ export function HeroPanel({
   /** Shared-layout id: the title flies in from an element with the same id */
   titleLayoutId?: string;
 }) {
-  const h1 = useRef<HTMLHeadingElement>(null);
-  const say = useAnnounce();
-  useEffect(() => {
-    say(announce);
-    const t = window.setTimeout(() => h1.current?.focus({ preventScroll: true }), 60);
-    return () => window.clearTimeout(t);
-  }, [announce, say]);
+  const h1 = useArrival<HTMLHeadingElement>(announce);
 
   return (
     <Panel size="hero" variant="plain">

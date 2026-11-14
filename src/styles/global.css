@@ -129,3 +129,13 @@ svg {
     scroll-behavior: auto !important;
   }
 }
+
+/* Typewriter caret (Résumé). A static block: it moves only because the text does. */
+.caret {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.05em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: currentColor;
+}

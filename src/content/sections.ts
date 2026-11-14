@@ -7,6 +7,8 @@ export const sections: Section[] = [
     path: '/writing',
     shape: 'arch',
     color: 'var(--writing)',
+    // "its dreams": the green mixed with 40% night
+    bg: 'color-mix(in srgb, var(--writing) 60%, var(--night))',
     text: 'paper',
     defaultMood: 'sleepy',
     hoverLine: 'I overthink things. Professionally.',

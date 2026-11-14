@@ -107,3 +107,27 @@ Assumptions made where the brief was open. Each one favours smooth motion and a 
 - **Cloud.** The cloud is 280px on desktop and 110px on phones, **with an ink outline**: on Contact's own red-orange its body was otherwise invisible. Its mood is curious while typing, grin otherwise, and worried on failure. On send it squashes, stretches up about 70px and lands (Motion keyframes, about 850ms). The typing indicator is three bouncing dots for 600ms (250ms and still with reduced motion).
 - **Wheel fix (all sections).** A vertical wheel over anything that scrolls vertically and can still move in that direction (the chat log, a long card) now scrolls that element instead of moving the track sideways.
 - **Tested** with Formspree mocked in the browser: success, server error, and retry. The posted payload was exactly the four answers plus the subject.
+
+## Phase 9: Writing, Gallery, Résumé
+
+- **A bug affecting every section, found and fixed here.** The section body's `AnimatePresence` had `initial={false}`. Motion passes that "skip initial animation" setting to every element inside, so the panels' fade-and-rise and the gallery burst never played when you arrived in a section. The presence now keeps initial animations on; only the body container itself appears instantly on first mount (the dive or eyelids are covering it anyway). I measured the burst frame by frame to confirm it now plays, and re-ran the phase 5–7 tests.
+
+### Writing
+
+- **Background** is `color-mix(in srgb, var(--writing) 60%, var(--night))`, stored as the section's `bg`, so the dive's colour layer matches the shell exactly. Paper text on it is well above AA.
+- **Stars** live in the persistent shell (like Work's eyes): two seeded layers of dots that drift slowly via CSS and parallax with the pointer at 1.2% and 3%. Reduced motion stops both.
+- **Bubbles.** Each post is a paper blob link on its own looping float path, blurred 2px at 70% opacity. Hover or focus brings it into focus (no blur, full opacity, scale 1.05) and dims the others to 35%. A bubble **pauses its drift while hovered or focused**, so it's easy to click. On touch screens (no hover) the bubbles are shown sharp. Small "thought" dots trail toward the sleepy Writing character in the corner. On phones the panel widens and the bubbles zig-zag, one per screen.
+- **Reading mode** (`/writing/:slug`): a near-black layer fades in ("lights down"), the post rises in as a 680px column with 20px body text, and only this view scrolls vertically. The peeking characters dim to 30% (full on hover or focus) so the post is all you see. The Writing character in the corner wakes to `smile` when an IntersectionObserver sees the end of the post. Escape returns to Writing. Note that with today's one-line placeholder posts, the end is visible immediately, so it wakes at once.
+
+### Gallery
+
+- **Layout.** Images are scattered in two loose rows across an area about 1.9× the screen width (3.2× on phones), with seeded jitter and a tilt of −8°…8°. The burst comes from the middle of the screen, with a spring and 45ms stagger, timed to start after the panel has appeared.
+- **Drag and fling.** Motion `drag` with momentum, constrained to the area with a little elastic. A drag never counts as a click.
+- **Lightbox.** A portal dialog with the image as large as fits, plus caption, count, ←/→ buttons and Close. Arrow keys step through the images, Escape closes only the lightbox (it's caught before the section's Escape), Tab stays inside, and focus returns to the tile you were last viewing. The rest of the gallery dims and shrinks back slightly behind it. I didn't fly the tile into the lightbox with a shared layout: tiles can be rotated and dragged anywhere, and the flight looked unreliable.
+- **Alt text is enforced at build time.** A Vite plugin compiles `src/content/gallery.ts` in `buildStart` and fails the build (and the dev server) if any `alt` is missing or blank, naming the entry. Verified by blanking tile 3.
+
+### Résumé
+
+- **One rigid sheet:** paper, 1px ink hairlines, Space Mono throughout, a header row (title, name, Download PDF) and four columns (Education, Experience, Skills, Publications). On phones it stacks into one scrolling column.
+- **Typewriter.** Every line types in reading order, one at a time, 8ms per character, driven by a rAF clock, with a static block caret on the current line. The **full text is always in the DOM** (the untyped part is just transparent), so screen readers, search and copy-paste get everything immediately. Reduced motion shows it at once.
+- **Nothing else moves.** Panels don't lift or fade in. The square in the corner is deadpan: its eyes are fixed (no pointer tracking) and it doesn't breathe, flinch or sleep. It blinks once, slowly (0.9s), when typing finishes. The rolling square slides, as before.

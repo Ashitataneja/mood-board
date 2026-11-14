@@ -11,6 +11,7 @@ import { sectionBodies } from '../sections/registry';
 import { BackdropMoodContext, SectionContext } from '../shell/context';
 import type { MoodId } from '../content/types';
 import { WorkEyes } from '../sections/work/WorkEyes';
+import { Stars } from '../sections/writing/Stars';
 import { Peeks } from '../shell/Peeks';
 import { useViewport } from '../hooks/useViewport';
 import NotFound from './NotFound';
@@ -45,7 +46,7 @@ function SectionShell({ id, slug }: { id: SectionId; slug?: string }) {
   const prevKey = useRef(key);
   const mode: Mode =
     prevKey.current === key
-      ? 'slide'
+      ? 'morph' // first mount: appear at once (the dive or eyelids are covering it)
       : prevKey.current.split('/')[0] !== id
         ? 'slide'
         : prevKey.current.includes('/') && key.includes('/')
@@ -76,7 +77,7 @@ function SectionShell({ id, slug }: { id: SectionId; slug?: string }) {
           <motion.div
             key={id}
             className={styles.bg}
-            style={{ background: s.color }}
+            style={{ background: s.bg ?? s.color }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 1, transition: { duration: reduced ? 0.2 : 0.6 } }}
@@ -98,9 +99,23 @@ function SectionShell({ id, slug }: { id: SectionId; slug?: string }) {
                 <WorkEyes mood={backdropMood} />
               </motion.div>
             )}
+            {id === 'writing' && (
+              <motion.div
+                key="writing-stars"
+                className={styles.backdrop}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: reduced ? 0.2 : 0.6 }}
+              >
+                <Stars />
+              </motion.div>
+            )}
           </AnimatePresence>
 
-          <AnimatePresence initial={false} custom={mode}>
+          {/* initial stays on: `initial={false}` here would also switch off every
+              entrance inside the body (panel reveals, the gallery burst). */}
+          <AnimatePresence custom={mode}>
             <motion.div
               key={key}
               className={styles.content}

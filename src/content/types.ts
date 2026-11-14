@@ -34,6 +34,8 @@ export interface Section {
   shape: ShapeId;
   /** CSS custom property holding the body colour */
   color: string;
+  /** Section background, when it differs from the body colour (Writing is darker) */
+  bg?: string;
   /** Text colour on this background (WCAG AA pairing from the brief) */
   text: 'paper' | 'ink';
   defaultMood: MoodId;
