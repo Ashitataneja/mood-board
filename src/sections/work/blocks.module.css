@@ -1,0 +1,141 @@
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 9vw, 140px);
+  line-height: 0.85;
+  color: var(--work);
+}
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.quote {
+  margin: 0;
+  padding: 22px 24px;
+  border-radius: 22px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.quote blockquote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.1;
+}
+.quote figcaption {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+.figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.figure figcaption {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.media {
+  width: 100%;
+  border-radius: 18px;
+  border: 3px solid var(--ink);
+  display: block;
+  object-fit: cover;
+  aspect-ratio: 16 / 10;
+  max-height: 30vh;
+}
+.placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  border: 3px solid var(--ink);
+  background: var(--tint-lilac);
+  max-height: 30vh;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  text-align: center;
+}
+.ba {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.baStage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+}
+.baStage .placeholder,
+.baStage .media {
+  border-radius: 18px;
+}
+.baWindow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.baLayer {
+  position: relative;
+}
+.baWindow .baLayer {
+  position: absolute;
+  inset: 0;
+}
+.baWindow .placeholder {
+  background: var(--tint-mint);
+}
+.baHandle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+.baHandle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -2px;
+  width: 4px;
+  background: var(--ink);
+}
+.baTag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.baTagAfter {
+  left: auto;
+  right: 12px;
+}
+.baLabel {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.baRange {
+  width: 100%;
+  accent-color: var(--ink);
+}

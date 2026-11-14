@@ -17,6 +17,8 @@ export interface ShellTrackProps {
   /** Live-region text when panel i becomes active (stage changes) */
   announceFor?: (i: number) => string | null | undefined;
   onActive?: (i: number) => void;
+  revealFrom?: number;
+  memoryKey?: string;
 }
 
 /** Horizontal track plus the rolling progress character, bound together. */
@@ -27,6 +29,8 @@ export function ShellTrack({
   moodFor,
   announceFor,
   onActive,
+  revealFrom,
+  memoryKey,
 }: ShellTrackProps) {
   const s = useSection();
   const vp = useViewport();
@@ -52,6 +56,8 @@ export function ShellTrack({
       <Track
         label={label}
         progress={progress}
+        revealFrom={revealFrom}
+        memoryKey={memoryKey}
         onActive={(i) => {
           setActive(i);
           onActive?.(i);

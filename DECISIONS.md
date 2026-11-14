@@ -74,3 +74,16 @@ Assumptions made where the brief was open. Each one favours smooth motion and a 
 - **Live region.** One polite `role="status"` region. It announces the section (or case study) on arrival and each case-study stage as it becomes active ("Work, case study BHAROSA, stage 3 of 5: Insight").
 - **Section bodies for now.** Each section shows real content from the data files as cards: case studies with their mood arc, About facts, posts, gallery tiles, contact links and résumé blocks. Phases 6–9 replace each one with its bespoke interior. Some data moved out of components into `src/content/about.ts` and `src/content/resume.ts`.
 - **Known rough edge.** On short phones (≈664px tall), a Work card's "Go inside →" sits below the fold inside the card, which scrolls. Revisit in phase 10.
+
+## Phase 6: Work and the case-study mood arc
+
+- **Background eyes.** The same `Face` component, with translucent fills (white eyes at 8%, pupils at 12%), no mouth, brows on, and a heavy spring (stiffness 40, damping 16). Each eye is `min(600px, 36vw, 62vh)`. The eyes live in the persistent shell (not the sliding body), so they don't duplicate or restart when you move between the Work index and a case study. Bodies steer their mood through a small `BackdropMoodContext`.
+- **Tilt cards.** At most 6°, at `perspective: 1000px`, mouse only (touch and reduced motion get no tilt). The glare is a soft blurred white disc in `soft-light` blend, moved by transform. It's a highlight, not a decorative gradient.
+- **Shared-layout title.** The card's title and the case study's `h1` share a Motion `layoutId`, so the title flies from the card into place. To let that read, the body transition depends on the move:
+  - index ↔ case study: **morph**. The new view appears at once, the old one fades in 300ms, and the hero panel skips its fade-and-rise when you arrived from a card.
+  - case study → case study ("Next case study →"): **quick slide**, 420ms.
+  - section → section: the 600ms slide from phase 4.
+- **Scroll memory.** Leaving a case study back to Work restores the index scroll, so you return to the card you opened and the title flies back to it.
+- **Case-study MDX.** Panel text stays in `work.ts`. An optional `src/content/work/<slug>/<stage>.mdx` renders under a panel's body with the building blocks `Stat`, `Quote`, `Figure` (image, video or placeholder) and `BeforeAfter`. The before/after slider is driven by a real range input (so it works with the keyboard and screen readers) and reveals with transforms only. Bharosa has placeholder MDX for research (quote), solution (figure, before/after) and impact (stat). Nothing in them is invented; every value is a `[PLACEHOLDER]`.
+- **Mood arc.** On each panel change, the rolling character and the background eyes take that panel's mood. The hero shows Work's usual `intense`, and "Coming soon" cases are `sleepy`.
+- **Coming soon.** The panel also links to the next case study, so the chain of case studies never dead-ends.

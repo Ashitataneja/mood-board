@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
+import { motion } from 'motion/react';
 import { useAnnounce } from '../components/Announcer';
 import { Panel } from '../shell/Track';
 import styles from './common.module.css';
@@ -33,6 +34,7 @@ export function HeroPanel({
   eyebrow,
   announce,
   children,
+  titleLayoutId,
 }: {
   title: string;
   line?: string;
@@ -40,6 +42,8 @@ export function HeroPanel({
   /** Read out in the live region when this view opens */
   announce: string;
   children?: ReactNode;
+  /** Shared-layout id: the title flies in from an element with the same id */
+  titleLayoutId?: string;
 }) {
   const h1 = useRef<HTMLHeadingElement>(null);
   const say = useAnnounce();
@@ -52,9 +56,16 @@ export function HeroPanel({
   return (
     <Panel size="hero" variant="plain">
       {eyebrow && <p className="label">{eyebrow}</p>}
-      <h1 ref={h1} tabIndex={-1} className={`display ${styles.heroTitle}`} data-section-title>
+      <motion.h1
+        ref={h1}
+        tabIndex={-1}
+        className={`display ${styles.heroTitle}`}
+        data-section-title
+        layoutId={titleLayoutId}
+        transition={{ type: 'spring', stiffness: 220, damping: 28 }}
+      >
         {title}
-      </h1>
+      </motion.h1>
       {line && (
         <p className={styles.heroLine}>
           <Txt>{line}</Txt>

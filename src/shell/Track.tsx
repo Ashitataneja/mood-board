@@ -14,7 +14,13 @@ export interface TrackProps {
   progress: MotionValue<number>;
   /** Called when the active panel changes */
   onActive?: (index: number) => void;
+  /** Panels before this index skip the fade-and-rise entrance */
+  revealFrom?: number;
+  /** Remember the scroll position under this key and restore it on return */
+  memoryKey?: string;
 }
+
+const memory = new Map<string, number>();
 
 /**
  * The horizontal track. Native horizontal scrolling (touch, trackpads,
@@ -22,7 +28,14 @@ export interface TrackProps {
  * arrow keys and PageUp/PageDown step panel by panel, and an "active"
  * panel nearest the left third of the viewport.
  */
-export function Track({ label, children, progress, onActive }: TrackProps) {
+export function Track({
+  label,
+  children,
+  progress,
+  onActive,
+  revealFrom = 0,
+  memoryKey,
+}: TrackProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { reduced } = useCharacterWorld();
   const onActiveRef = useRef(onActive);
@@ -32,6 +45,7 @@ export function Track({ label, children, progress, onActive }: TrackProps) {
     const el = ref.current;
     if (!el) return;
 
+    if (memoryKey && memory.has(memoryKey)) el.scrollLeft = memory.get(memoryKey)!;
     let pos = el.scrollLeft;
     let target = pos;
     let raf = 0;
@@ -107,6 +121,7 @@ export function Track({ label, children, progress, onActive }: TrackProps) {
 
     const onScroll = () => {
       if (!gliding) pos = target = el.scrollLeft;
+      if (memoryKey) memory.set(memoryKey, el.scrollLeft);
       queueMeasure();
     };
 
@@ -154,7 +169,7 @@ export function Track({ label, children, progress, onActive }: TrackProps) {
       cancelAnimationFrame(raf);
       cancelAnimationFrame(measureQueued);
     };
-  }, [progress, reduced]);
+  }, [progress, reduced, memoryKey]);
 
   return (
     <div
@@ -164,11 +179,17 @@ export function Track({ label, children, progress, onActive }: TrackProps) {
       aria-label={`${label}. Scrolls sideways; use the arrow keys to move between panels.`}
       tabIndex={0}
     >
-      {Children.toArray(children).map((child, i) => (
-        <Reveal key={i} i={i} className={styles.slot}>
-          {child}
-        </Reveal>
-      ))}
+      {Children.toArray(children).map((child, i) =>
+        i < revealFrom ? (
+          <div key={i} className={styles.slot}>
+            {child}
+          </div>
+        ) : (
+          <Reveal key={i} i={i - revealFrom} className={styles.slot}>
+            {child}
+          </Reveal>
+        ),
+      )}
     </div>
   );
 }
@@ -188,7 +209,8 @@ export function Panel({
   label,
 }: {
   size?: PanelSize;
-  variant?: 'card' | 'plain';
+  /** card: paper surface; plain: on the section colour; bare: shadow only, bring your own surface */
+  variant?: 'card' | 'plain' | 'bare';
   children: ReactNode;
   className?: string;
   labelledBy?: string;
@@ -196,7 +218,7 @@ export function Panel({
 }) {
   return (
     <div data-panel className={[styles.panel, styles[size]].join(' ')}>
-      {variant === 'card' && <div className={styles.shadow} aria-hidden="true" />}
+      {variant !== 'plain' && <div className={styles.shadow} aria-hidden="true" />}
       <section
         className={[styles.surface, styles[variant], className].filter(Boolean).join(' ')}
         aria-labelledby={labelledBy}

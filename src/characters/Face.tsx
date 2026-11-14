@@ -36,6 +36,13 @@ export interface FaceProps {
   eyeSize?: number;
   /** Draw the mouth and brows (off for faces that only peek) */
   mouth?: boolean;
+  /** Draw brows when the mood asks for them. Defaults to `mouth`. */
+  brows?: boolean;
+  /** Override eye and pupil fills (the faint background eyes use translucent white) */
+  eyeFill?: string;
+  pupilFill?: string;
+  /** Colour of the lid edge and closed-eye strokes. Defaults to textColor. */
+  lineColor?: string;
   className?: string;
 }
 
@@ -59,6 +66,10 @@ export function Face({
   eyeSpring = springs.eyes,
   eyeSize,
   mouth = true,
+  brows,
+  eyeFill = 'var(--white)',
+  pupilFill = 'var(--ink)',
+  lineColor,
   className,
 }: FaceProps) {
   const { pointerX, pointerY, reduced } = useCharacterWorld();
@@ -197,6 +208,8 @@ export function Face({
 
   // --- render -------------------------------------------------------------
   const lineW = Math.max(1.5, E * 0.06);
+  const line = lineColor ?? textColor;
+  const showBrows = brows ?? mouth;
   const browOpacity = spec.brows ? 1 : 0;
   const m = mouths[spec.mouth];
   const moodT = reduced ? instant : springs.default;
@@ -217,14 +230,14 @@ export function Face({
         <clipPath id={`${uid}-${side}-lid`}>
           <circle cx={cx} cy={ey} r={E / 2 + 1} />
         </clipPath>
-        <circle cx={cx} cy={ey} r={E / 2} style={{ fill: 'var(--white)' }} />
+        <circle cx={cx} cy={ey} r={E / 2} style={{ fill: eyeFill }} />
         <g clipPath={`url(#${uid}-${side})`}>
           <motion.circle
             data-pupil={side}
             cx={cx}
             cy={ey}
             r={E / 2}
-            style={{ fill: 'var(--ink)', x: px, y: py, scale: pupil }}
+            style={{ fill: pupilFill, x: px, y: py, scale: pupil }}
           />
         </g>
         <g clipPath={`url(#${uid}-${side}-lid)`}>
@@ -243,7 +256,7 @@ export function Face({
             strokeWidth={lineW}
             strokeLinecap="round"
             style={{
-              stroke: textColor,
+              stroke: line,
               y: lineY,
               opacity: lineO,
             }}
@@ -254,7 +267,7 @@ export function Face({
           fill="none"
           strokeWidth={Math.max(1.5, E * 0.09)}
           strokeLinecap="round"
-          style={{ stroke: textColor, opacity: shutO }}
+          style={{ stroke: line, opacity: shutO }}
         />
       </g>
     );
@@ -273,40 +286,40 @@ export function Face({
     >
       {eye(lx, 'L')}
       {eye(rx, 'R')}
+      {showBrows && (
+        <motion.g initial={false} animate={{ opacity: browOpacity }} transition={moodT}>
+          <rect
+            x={lx - E * 0.35}
+            y={ey - E * 0.86}
+            width={E * 0.7}
+            height={E * 0.14}
+            rx={E * 0.07}
+            transform={`rotate(-14 ${lx} ${ey - E * 0.79})`}
+            style={{ fill: line }}
+          />
+          <rect
+            x={rx - E * 0.35}
+            y={ey - E * 0.86}
+            width={E * 0.7}
+            height={E * 0.14}
+            rx={E * 0.07}
+            transform={`rotate(14 ${rx} ${ey - E * 0.79})`}
+            style={{ fill: line }}
+          />
+        </motion.g>
+      )}
       {mouth && (
-        <>
-          <motion.g initial={false} animate={{ opacity: browOpacity }} transition={moodT}>
-            <rect
-              x={lx - E * 0.35}
-              y={ey - E * 0.86}
-              width={E * 0.7}
-              height={E * 0.14}
-              rx={E * 0.07}
-              transform={`rotate(-14 ${lx} ${ey - E * 0.79})`}
-              style={{ fill: textColor }}
-            />
-            <rect
-              x={rx - E * 0.35}
-              y={ey - E * 0.86}
-              width={E * 0.7}
-              height={E * 0.14}
-              rx={E * 0.07}
-              transform={`rotate(14 ${rx} ${ey - E * 0.79})`}
-              style={{ fill: textColor }}
-            />
-          </motion.g>
-          <g transform={`translate(${g.mx} ${g.my}) scale(${g.mouthW / 60})`}>
-            <motion.path
-              initial={false}
-              animate={{ d: m.d, fillOpacity: m.filled ? 1 : 0 }}
-              transition={mouthT}
-              strokeWidth={4}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ stroke: textColor, fill: 'var(--ink)' }}
-            />
-          </g>
-        </>
+        <g transform={`translate(${g.mx} ${g.my}) scale(${g.mouthW / 60})`}>
+          <motion.path
+            initial={false}
+            animate={{ d: m.d, fillOpacity: m.filled ? 1 : 0 }}
+            transition={mouthT}
+            strokeWidth={4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ stroke: textColor, fill: 'var(--ink)' }}
+          />
+        </g>
       )}
     </svg>
   );
